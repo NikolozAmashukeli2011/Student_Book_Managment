@@ -17,7 +17,8 @@ namespace Student_Book_Managment.Services.BooksService
             while (string.IsNullOrWhiteSpace(title) || title.All(char.IsDigit))
             {
                 title = Prompter.PromptGeneric<string>("Input mustn't be an empty text," +
-                                                        " and should contain atleast 1 letter, try again: ", "input must be a text, try again: ");
+                                                        " and should contain atleast 1 letter, try again: ",
+                                                        "input must be a text, try again: ");
             }
 
             return title.Trim();

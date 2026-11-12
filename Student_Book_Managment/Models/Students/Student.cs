@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Student_Book_Managment.Exceptions;
+using Student_Book_Managment.Models.Books;
 
 namespace Student_Managment.Models
 {
     internal class Student
     {
-        public static readonly HashSet<char> grades = new HashSet<char>() {'A', 'B', 'C', 'D', 'F'};
+        public static readonly HashSet<char> grades = new HashSet<char>() { 'A', 'B', 'C', 'D', 'F' };
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int RollNum { get; set; }
         private static int _Count = 0;
-        public static int Count 
+        public static int Count
         {
             get
             {
@@ -24,7 +23,7 @@ namespace Student_Managment.Models
             }
         }
         private char _grade;
-        public char Grade 
+        public char Grade
         {
             get
             {
@@ -36,16 +35,17 @@ namespace Student_Managment.Models
                 if (IsValidGrade(value))
                 {
                     _grade = value;
-                } else
+                }
+                else
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "argument isn't a grade.");
+                    throw new GradeInvalidException("Argument isn't a valid grade.");
                 }
             }
 
         }
         public static bool IsValidGrade(char grade)
         {
-            if (grades.Contains(grade)) return true; return false;
+            return grades.Contains(grade);
         }
 
         public Student(string name, int rollNum, char grade)
