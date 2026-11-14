@@ -1,4 +1,5 @@
 ﻿using Student_Book_Managment.DataHandlers;
+using Student_Book_Managment.Exceptions;
 using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.StudentsService
@@ -9,10 +10,10 @@ namespace Student_Book_Managment.Services.StudentsService
         public static SortedList<char, List<Student>> BestGradeToStudentsMap = new SortedList<char, List<Student>>();
         public static Dictionary<int, List<Student>> RollToStudentsMap = new Dictionary<int, List<Student>>();
         public static Dictionary<int, Student> IdToStudentMap = new Dictionary<int, Student>();
-
+        private static readonly string FilePath = "students.json";
         static StudentManager()
         {
-            StudentStorageData data = StudentStorage.Load();
+            StudentStorageData data = JsonFIleStorage.Load<StudentStorageData>(FilePath);
 
             Student.Count = data.IdCount;
 
@@ -24,7 +25,7 @@ namespace Student_Book_Managment.Services.StudentsService
 
         private static void SaveAll()
         {
-            StudentStorage.Save(new StudentStorageData(studentsList, Student.Count));
+            JsonFIleStorage.Save<StudentStorageData>(new StudentStorageData(studentsList, Student.Count), FilePath);
         }
 
         private static void AddToCollections(Student s)
@@ -40,18 +41,23 @@ namespace Student_Book_Managment.Services.StudentsService
                 rollStudents = new List<Student>();
                 RollToStudentsMap[s.RollNum] = rollStudents;
             }
-            
+
             gradeStudents.Add(s);
             rollStudents.Add(s);
             studentsList.Add(s);
             IdToStudentMap.Add(s.Id, s);
         }
 
+        public static void ModifyGrade(Student student, char grade)
+        {
+            if (Student.IsValidGrade(grade)) student.Grade = grade; throw new GradeInvalidException();
+        }
+
         public static void DisplayAllStudents()
         {
             if (studentsList.Count == 0)
             {
-                Console.WriteLine("There are no students.");
+                Console.WriteLine("\nThere are no students.");
             }
             else
             {
@@ -68,8 +74,9 @@ namespace Student_Book_Managment.Services.StudentsService
         {
             if (BestGradeToStudentsMap.Count == 0)
             {
-                Console.WriteLine("There are no students.");
-            } else
+                Console.WriteLine("\nThere are no students.");
+            }
+            else
             {
                 Console.WriteLine("\n[STUDENTS BY GRADE]\n");
 
@@ -106,6 +113,8 @@ namespace Student_Book_Managment.Services.StudentsService
                 return false;
             }
         }
+
+        public static bool IdIsValid(int id) => IdToStudentMap.ContainsKey(id);
 
         public static bool FindStudentById(int id, out Student? foundStudent)
         {
@@ -147,14 +156,22 @@ namespace Student_Book_Managment.Services.StudentsService
             }
         }
 
-        public static void RemoveAllStudents()
+        public static bool RemoveAllStudents()
         {
-            studentsList.Clear();
-            IdToStudentMap.Clear();
-            BestGradeToStudentsMap.Clear();
-            RollToStudentsMap.Clear();
+            if (studentsList.Count > 0)
+            {
+                studentsList.Clear();
+                IdToStudentMap.Clear();
+                BestGradeToStudentsMap.Clear();
+                RollToStudentsMap.Clear();
 
-            SaveAll();
+                SaveAll();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

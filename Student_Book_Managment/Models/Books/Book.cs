@@ -1,10 +1,13 @@
-﻿namespace Student_Book_Managment.Models.Books
+﻿using Student_Book_Managment.Exceptions;
+
+namespace Student_Book_Managment.Models.Books
 {
     internal class Book
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
+        public int? BorrowedByStudentId { get; set; } = null;
         private static int _Count = 0;
         public static int Count
         {
@@ -29,7 +32,7 @@
             {
                 if (value < 1 || value > 2026)
                 {
-                    throw new ArgumentOutOfRangeException($"{nameof(value)} must be above 0, and must not be greater then 2026.");
+                    throw new YearInvalidException();
                 }
                 else
                 {

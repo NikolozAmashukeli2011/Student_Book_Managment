@@ -1,19 +1,22 @@
 ﻿using Student_Book_Managment.DataHandlers;
+using Student_Book_Managment.Exceptions;
 using Student_Book_Managment.Models.Books;
+using Student_Managment.Models;
 
-namespace Student_Book_Managment.Services.BooksService
+namespace Student_Book_Managment.Services.Managers
 {
     static class BookManager
     {
-        public static HashSet<Book> SetOfBooks { get; set; } = new HashSet<Book>();
-        public static Dictionary<string, HashSet<Book>> AuthorToBooksSetMap { get; set; } = new Dictionary<string, HashSet<Book>>(StringComparer.OrdinalIgnoreCase);
-        public static Dictionary<string, Book> TitleToBookMap { get; set; } = new Dictionary<string, Book>(StringComparer.OrdinalIgnoreCase);
-        public static Dictionary<int, Book> IdToBookMap { get; set; } = new Dictionary<int, Book>();
-        public static SortedList<int, HashSet<Book>> YearToBooksSortedList { get; set; } = new SortedList<int, HashSet<Book>>();
+        public static HashSet<Book> SetOfBooks = new HashSet<Book>();
+        public static Dictionary<string, HashSet<Book>> AuthorToBooksSetMap = new Dictionary<string, HashSet<Book>>(StringComparer.OrdinalIgnoreCase);
+        public static Dictionary<string, Book> TitleToBookMap = new Dictionary<string, Book>(StringComparer.OrdinalIgnoreCase);
+        public static Dictionary<int, Book> IdToBookMap = new Dictionary<int, Book>();
+        public static SortedList<int, HashSet<Book>> YearToBooksSortedList = new SortedList<int, HashSet<Book>>();
+        private static readonly string FilePath = "books.json";
 
         static BookManager()
         {
-            BookStorageData data = BookStorage.Load();
+            BookStorageData data = JsonFIleStorage.Load<BookStorageData>(FilePath);
 
             Book.Count = data.IdCount;
 
@@ -25,7 +28,7 @@ namespace Student_Book_Managment.Services.BooksService
 
         private static void SaveAll()
         {
-            BookStorage.Save(new BookStorageData(Book.Count, SetOfBooks));
+            JsonFIleStorage.Save<BookStorageData>(new BookStorageData(Book.Count, SetOfBooks), FilePath);
         }
 
         private static void AddToAll(Book b)
@@ -49,12 +52,7 @@ namespace Student_Book_Managment.Services.BooksService
             IdToBookMap.Add(b.Id, b);
         }
 
-
-        private static bool BookExists(Book b)
-        {
-            if (IdToBookMap.ContainsKey(b.Id) || TitleToBookMap.ContainsKey(b.Title)) return true; return false;
-        }
-
+        private static bool BookExists(Book b) => IdToBookMap.ContainsKey(b.Id) || TitleToBookMap.ContainsKey(b.Title);
 
         public static bool AddBook(Book book)
         {
@@ -70,6 +68,8 @@ namespace Student_Book_Managment.Services.BooksService
             }
         }
 
+        public static bool IdIsValid(int id) => IdToBookMap.ContainsKey(id);
+
         public static void DisplayAllBooks()
         {
             if (SetOfBooks.Count == 0)
@@ -82,7 +82,7 @@ namespace Student_Book_Managment.Services.BooksService
 
                 foreach (Book book in SetOfBooks)
                 {
-                    Console.WriteLine($"{book.ToString()}\n");
+                    Console.WriteLine($"{book}\n");
                 }
             }
 
@@ -131,7 +131,8 @@ namespace Student_Book_Managment.Services.BooksService
                 if (authorSet?.Count <= 1)
                 {
                     AuthorToBooksSetMap.Remove(book.Author);
-                } else 
+                }
+                else
                 {
                     authorSet?.Remove(book);
                 }
@@ -141,7 +142,8 @@ namespace Student_Book_Managment.Services.BooksService
                 if (yearSet?.Count <= 1)
                 {
                     YearToBooksSortedList.Remove(book.YearOfPublish);
-                } else
+                }
+                else
                 {
                     yearSet?.Remove(book);
                 }
@@ -160,15 +162,22 @@ namespace Student_Book_Managment.Services.BooksService
             }
         }
 
-        public static void RemoveAllBooks()
+        public static bool RemoveAllBooks()
         {
-            SetOfBooks.Clear();
-            TitleToBookMap.Clear();
-            IdToBookMap.Clear();
-            AuthorToBooksSetMap.Clear();
-            YearToBooksSortedList.Clear();
-
-            SaveAll();
+            if (SetOfBooks.Count > 0)
+            {
+                SetOfBooks.Clear();
+                TitleToBookMap.Clear();
+                IdToBookMap.Clear();
+                AuthorToBooksSetMap.Clear();
+                YearToBooksSortedList.Clear();
+                SaveAll();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

@@ -6,6 +6,6 @@ namespace Student_Book_Managment.Exceptions
 {
     internal class GradeInvalidException : AppException
     {
-        public GradeInvalidException(string message) : base(message) {}
+        public GradeInvalidException(string msg = "Argument isn't a valid grade.") : base(msg) {}
     }
 }

@@ -1,11 +1,13 @@
 ﻿using Student_Book_Managment.Exceptions;
 using Student_Book_Managment.Models.Books;
+using System.Runtime.InteropServices;
 
 namespace Student_Managment.Models
 {
     internal class Student
     {
         public static readonly HashSet<char> grades = new HashSet<char>() { 'A', 'B', 'C', 'D', 'F' };
+        public HashSet<Book> BorrowedBooks = [];
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int RollNum { get; set; }
@@ -38,7 +40,7 @@ namespace Student_Managment.Models
                 }
                 else
                 {
-                    throw new GradeInvalidException("Argument isn't a valid grade.");
+                    throw new GradeInvalidException();
                 }
             }
 

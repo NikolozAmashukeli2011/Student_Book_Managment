@@ -1,20 +1,22 @@
 ﻿using Student_Book_Managment.Models.Books;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 
 namespace Student_Book_Managment.DataHandlers
 {
-    internal static class BookStorage
+    internal class JsonFIleStorage
     {
-        private static readonly string FilePath = "book.json";
-        private static readonly JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
+        private static readonly JsonSerializerOptions Options = new JsonSerializerOptions() { WriteIndented = true };
 
-        public static void Save(BookStorageData bookData)
+        public static void Save<T>(T data, string path)
         {
-            string json = JsonSerializer.Serialize(bookData, options);
+            string json = JsonSerializer.Serialize(data, Options);
 
             try
             {
-                using (StreamWriter sw = new StreamWriter(FilePath))
+                using (StreamWriter sw = new StreamWriter(path))
                 {
                     sw.Write(json);
                 }
@@ -29,16 +31,16 @@ namespace Student_Book_Managment.DataHandlers
             }
         }
 
-        public static BookStorageData Load()
+        public static T Load<T>(string path) where T: new()
         {
-            if (!File.Exists(FilePath)) return new BookStorageData();
+            if (!File.Exists(path)) return new T();
 
             try
             {
-                using (StreamReader sr = new StreamReader(FilePath))
+                using (StreamReader sr = new StreamReader(path))
                 {
                     string json = sr.ReadToEnd();
-                    return JsonSerializer.Deserialize<BookStorageData>(json, options) ?? new BookStorageData();
+                    return JsonSerializer.Deserialize<T>(json, Options) ?? new T();
                 }
             }
             catch (IOException ex)
@@ -54,7 +56,7 @@ namespace Student_Book_Managment.DataHandlers
                 Console.WriteLine($"The text isn't a valid JSON. {ex.Message}.");
             }
 
-            return new BookStorageData();
+            return new T();
         }
     }
 }
