@@ -14,9 +14,9 @@ namespace Student_Book_Managment.Services.Managers
         public static SortedList<int, HashSet<Book>> YearToBooksSortedList = new SortedList<int, HashSet<Book>>();
         private static readonly string FilePath = "books.json";
 
-        static BookManager()
+        public static async Task InitializeAsync()
         {
-            BookStorageData data = JsonFIleStorage.Load<BookStorageData>(FilePath);
+            BookStorageData data = await JsonFIleStorage.Load<BookStorageData>(FilePath);
 
             Book.Count = data.IdCount;
 
@@ -26,10 +26,7 @@ namespace Student_Book_Managment.Services.Managers
             }
         }
 
-        private static void SaveAll()
-        {
-            JsonFIleStorage.Save<BookStorageData>(new BookStorageData(Book.Count, SetOfBooks), FilePath);
-        }
+        private static async void SaveAllAsync() => await JsonFIleStorage.Save(new BookStorageData(Book.Count, SetOfBooks), FilePath);
 
         private static void AddToAll(Book b)
         {
@@ -63,7 +60,7 @@ namespace Student_Book_Managment.Services.Managers
             else
             {
                 AddToAll(book);
-                SaveAll();
+                SaveAllAsync();
                 return true;
             }
         }
@@ -152,7 +149,7 @@ namespace Student_Book_Managment.Services.Managers
                 TitleToBookMap.Remove(book.Title);
                 IdToBookMap.Remove(book.Id);
 
-                SaveAll();
+                SaveAllAsync();
 
                 return true;
             }
@@ -171,7 +168,7 @@ namespace Student_Book_Managment.Services.Managers
                 IdToBookMap.Clear();
                 AuthorToBooksSetMap.Clear();
                 YearToBooksSortedList.Clear();
-                SaveAll();
+                 SaveAllAsync();
                 return true;
             }
             else

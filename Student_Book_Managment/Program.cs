@@ -1,7 +1,12 @@
-﻿using Student_Book_Managment.Services.Managers;
+﻿using Student_Book_Managment.DataHandlers;
+using Student_Book_Managment.Services.Managers;
 using Student_Book_Managment.Services.MenuActions;
 using Student_Book_Managment.Services.StudentsService;
 using Student_Managment.Helpers;
+using Student_Managment.Models;
+
+await StudentManager.InitializeAsync();
+await BookManager.InitializeAsync();
 
 int choice;
 int methodAmout = 18;

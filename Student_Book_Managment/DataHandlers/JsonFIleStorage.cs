@@ -10,7 +10,7 @@ namespace Student_Book_Managment.DataHandlers
     {
         private static readonly JsonSerializerOptions Options = new JsonSerializerOptions() { WriteIndented = true };
 
-        public static void Save<T>(T data, string path)
+        public async static Task Save<T>(T data, string path)
         {
             string json = JsonSerializer.Serialize(data, Options);
 
@@ -31,7 +31,7 @@ namespace Student_Book_Managment.DataHandlers
             }
         }
 
-        public static T Load<T>(string path) where T: new()
+        public async static Task<T> Load<T>(string path) where T: new()
         {
             if (!File.Exists(path)) return new T();
 
@@ -39,7 +39,7 @@ namespace Student_Book_Managment.DataHandlers
             {
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    string json = sr.ReadToEnd();
+                    string json = await sr.ReadToEndAsync();
                     return JsonSerializer.Deserialize<T>(json, Options) ?? new T();
                 }
             }
