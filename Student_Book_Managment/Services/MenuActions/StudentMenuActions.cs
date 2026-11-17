@@ -33,7 +33,7 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (foundStudent == null)
             {
-                Console.WriteLine($"Student with id: {id} couldn't be found!");
+                Console.WriteLine($"Student with id: {id} couldn't be found!\n");
             }
             else
             {
@@ -59,7 +59,7 @@ namespace Student_Book_Managment.Services.MenuActions
             }
             else
             {
-                Console.WriteLine($"\nStudent with id: {id} couldn't be found.");
+                Console.WriteLine($"\nStudent with id: {id} couldn't be found.\n");
             }
         }
 

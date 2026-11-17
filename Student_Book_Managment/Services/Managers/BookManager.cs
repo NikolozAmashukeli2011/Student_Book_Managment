@@ -1,7 +1,5 @@
 ﻿using Student_Book_Managment.DataHandlers;
-using Student_Book_Managment.Exceptions;
 using Student_Book_Managment.Models.Books;
-using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.Managers
 {
@@ -49,7 +47,7 @@ namespace Student_Book_Managment.Services.Managers
             IdToBookMap.Add(b.Id, b);
         }
 
-        private static bool BookExists(Book b) => IdToBookMap.ContainsKey(b.Id) || TitleToBookMap.ContainsKey(b.Title);
+        private static bool BookExists(Book b) => IdToBookMap.ContainsKey(b.Id);
 
         public static bool AddBook(Book book)
         {
@@ -168,7 +166,7 @@ namespace Student_Book_Managment.Services.Managers
                 IdToBookMap.Clear();
                 AuthorToBooksSetMap.Clear();
                 YearToBooksSortedList.Clear();
-                 SaveAllAsync();
+                SaveAllAsync();
                 return true;
             }
             else

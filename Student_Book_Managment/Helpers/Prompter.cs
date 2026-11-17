@@ -36,7 +36,7 @@ namespace Student_Managment.Helpers
            string retryTxt = "Input must be either yes, or no, try again: ")
         {
 
-            string choice =  PromptString(txt, errTxt).Trim();
+            string choice = PromptString(txt, errTxt).Trim();
 
             bool ChoiceIsYes() => string.Equals(choice, "Yes", StringComparison.OrdinalIgnoreCase);
 
@@ -49,5 +49,20 @@ namespace Student_Managment.Helpers
 
             return ChoiceIsYes();
         }
+
+        public static T PromptEnum<T>(string txt, string retryTxt, string errTxt, bool ignoreCase = true) where T : struct, Enum
+        {
+            T result;
+
+            string input = PromptGeneric<string>(txt, errTxt).Trim();
+
+            while (!Enum.TryParse(input, ignoreCase, out result) || int.TryParse(input, out _))
+            {
+                input = PromptGeneric<string>(retryTxt, errTxt).Trim();
+            }
+
+            return result;
+        }
+
     }
 }
