@@ -4,7 +4,7 @@ using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.Managers
 {
-    internal static class LoanManager
+    internal static class LibraryManager
     {
         public static Dictionary<Student, List<Book>> StudentToBorrowedBooksMap = new Dictionary<Student, List<Book>>();
         public static Dictionary<int, int> BookIdToBorrowerId = new Dictionary<int, int>();
@@ -51,5 +51,21 @@ namespace Student_Book_Managment.Services.Managers
                 return false;
             }
         }
+
+        public static void DisplayBorrowedBooks(Student student)
+        {
+            if (student.BorrowedBooks.Count == 0)
+            {
+                Console.WriteLine("Student hasn't borrowed any books!\n");
+            }
+            else
+            {
+                foreach (Book book in student.BorrowedBooks)
+                {
+                    Console.WriteLine(book);
+                }
+            }
+        }
+
     }
 }

@@ -20,7 +20,7 @@ namespace Student_Book_Managment.Services.MenuActions
             if (success)
             {
                 Console.WriteLine("Book added successfully!\n");
-                Console.WriteLine($"{book}\n");
+                Console.WriteLine(book);
             }
             else
             {
@@ -52,7 +52,7 @@ namespace Student_Book_Managment.Services.MenuActions
 
             try
             {
-                LoanManager.BorrowBook(student!, book!);
+                LibraryManager.BorrowBook(student!, book!);
 
                 Console.WriteLine($"{book!.Title} borrowed successfully!");
             }
@@ -82,13 +82,27 @@ namespace Student_Book_Managment.Services.MenuActions
                 return;
             }
 
-            if (LoanManager.ReturnBook(student!, bookId))
+            if (LibraryManager.ReturnBook(student!, bookId))
             {
                 Console.WriteLine("\nBook returned successfully!");
             }
             else
             {
                 Console.WriteLine("\nYou haven't even borrowed this book!");
+            }
+        }
+
+        public static void DisplayBorrowedBooks()
+        {
+            int studentId = StudentPrompter.PromptId();
+
+            if (!StudentManager.FindStudentById(studentId, out Student? foundStudent))
+            {
+                Console.WriteLine($"Student with id: {studentId} couldn't be found!\n");
+            }
+            else
+            {
+                LibraryManager.DisplayBorrowedBooks(foundStudent!);
             }
         }
 
@@ -99,7 +113,7 @@ namespace Student_Book_Managment.Services.MenuActions
             if (BookManager.GetBookByTitle(title, out Book? foundBook))
             {
                 Console.WriteLine("\nBook found.\n");
-                Console.WriteLine($"{foundBook?.ToString()}\n");
+                Console.WriteLine(foundBook);
             }
             else
             {
@@ -114,7 +128,7 @@ namespace Student_Book_Managment.Services.MenuActions
             if (BookManager.GetBookById(id, out Book? foundBook))
             {
                 Console.WriteLine("\nBook found.\n");
-                Console.WriteLine($"{foundBook?.ToString()}\n");
+                Console.WriteLine(foundBook);
             }
             else
             {
@@ -131,7 +145,7 @@ namespace Student_Book_Managment.Services.MenuActions
                 BookManager.RemoveBook(foundBook!);
 
                 Console.WriteLine("Book removed successfully!\n");
-                Console.WriteLine($"{foundBook!}\n");
+                Console.WriteLine(foundBook!);
             }
             else
             {
@@ -142,31 +156,17 @@ namespace Student_Book_Managment.Services.MenuActions
 
         public static void RemoveAllBooks()
         {
-
-            string choice = Prompter.PromptGeneric<string>("Are you sure that you want to remove all books? (Yes or No):",
-                                                            "Input must be a text, try again: ").Trim();
-
-            bool sure = string.Equals(choice, "Yes", StringComparison.OrdinalIgnoreCase);
-            bool unSure = string.Equals(choice, "No", StringComparison.OrdinalIgnoreCase);
-
-            while (!sure && !unSure)
-            {
-                choice = Prompter.PromptGeneric<string>("Input must be either yes, or no, try again: ",
-                                                        "Input must be a text, try again: ").Trim();
-
-                sure = string.Equals(choice, "Yes", StringComparison.OrdinalIgnoreCase);
-                unSure = string.Equals(choice, "No", StringComparison.OrdinalIgnoreCase);
-            }
+            bool sure = Prompter.PromptChoice();
 
             if (sure)
             {
                 if (BookManager.RemoveAllBooks())
                 {
-                    Console.WriteLine("\nBooks removed Successfully!\n");
+                    Console.WriteLine("\nBooks removed successfully!");
                 }
                 else
                 {
-                    Console.WriteLine("\nThere are no books!");
+                    Console.WriteLine("\nThere are no Books!");
                 }
             }
         }

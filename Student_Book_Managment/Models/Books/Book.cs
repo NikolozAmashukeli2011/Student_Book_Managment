@@ -57,7 +57,7 @@ namespace Student_Book_Managment.Models.Books
 
         public override string ToString()
         {
-            return $"Id: {Id}, Title: {Title}, Author: {Author}, Year Of Publish: {YearOfPublish}.";
+            return $"Id: {Id}, Title: {Title}, Author: {Author}, Year Of Publish: {YearOfPublish}.\n";
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Student_Managment.Models
 
         public override string ToString()
         {
-            return $"Id: {Id}, Name: {Name}, Roll Number: {RollNum}, Grade: {Grade}.";
+            return $"Id: {Id}, Name: {Name}, Roll Number: {RollNum}, Grade: {Grade}.\n";
         }
     }
 }

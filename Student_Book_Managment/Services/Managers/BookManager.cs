@@ -12,7 +12,7 @@ namespace Student_Book_Managment.Services.Managers
         public static Dictionary<string, Book> TitleToBookMap = new Dictionary<string, Book>(StringComparer.OrdinalIgnoreCase);
         public static Dictionary<int, Book> IdToBookMap = new Dictionary<int, Book>();
         public static SortedList<int, HashSet<Book>> YearToBooksSortedList = new SortedList<int, HashSet<Book>>();
-        private static readonly string FilePath = "books.json";
+        private static readonly string FilePath = @"C:\Users\user\Desktop\Backend\Projects\Student&BookManagment\Student_Book_Managment\JsonFolders\Books.json";
 
         public static async Task InitializeAsync()
         {
@@ -79,7 +79,7 @@ namespace Student_Book_Managment.Services.Managers
 
                 foreach (Book book in SetOfBooks)
                 {
-                    Console.WriteLine($"{book}\n");
+                    Console.WriteLine(book);
                 }
             }
 
@@ -101,7 +101,7 @@ namespace Student_Book_Managment.Services.Managers
 
                     foreach (Book book in books)
                     {
-                        Console.WriteLine($"{book.ToString()}\n");
+                        Console.WriteLine(book);
                     }
                 }
             }

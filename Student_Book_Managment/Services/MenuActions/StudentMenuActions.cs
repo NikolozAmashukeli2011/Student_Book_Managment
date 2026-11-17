@@ -16,7 +16,7 @@ namespace Student_Book_Managment.Services.MenuActions
             if (success)
             {
                 Console.WriteLine("Student added successfully!\n");
-                Console.WriteLine($"{studentToAdd.ToString()}\n");
+                Console.WriteLine(studentToAdd);
 
             }
             else
@@ -55,7 +55,7 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 StudentManager.RemoveStudent(student!);
                 Console.WriteLine("Student removed successfully!\n");
-                Console.WriteLine($"{student!}\n");
+                Console.WriteLine(student!);
             }
             else
             {
@@ -76,14 +76,14 @@ namespace Student_Book_Managment.Services.MenuActions
 
                     foreach (Student student in students!)
                     {
-                        Console.WriteLine($"{student}\n");
+                        Console.WriteLine(student);
                     }
                 }
 
             }
             else
             {
-                Console.WriteLine($"Students in roll number: {rollNum} couldn't be found/is empty.");
+                Console.WriteLine($"Students in roll number: {rollNum} couldn't be found.\n");
             }
         }
         public static void FindStudentByIdAction()
@@ -95,11 +95,11 @@ namespace Student_Book_Managment.Services.MenuActions
             if (foundSuccessfully)
             {
                 Console.WriteLine("Student found successfully!\n");
-                Console.WriteLine($"{student!}\n");
+                Console.WriteLine(student!);
             }
             else
             {
-                Console.WriteLine($"Student with id: {id} couldn't be found.");
+                Console.WriteLine($"Student with id: {id} couldn't be found.\n");
             }
         }
 

@@ -10,7 +10,7 @@ namespace Student_Book_Managment.Services.StudentsService
         public static SortedList<char, List<Student>> BestGradeToStudentsMap = new SortedList<char, List<Student>>();
         public static Dictionary<int, List<Student>> RollToStudentsMap = new Dictionary<int, List<Student>>();
         public static Dictionary<int, Student> IdToStudentMap = new Dictionary<int, Student>();
-        private static readonly string FilePath = "students.json";
+        private static readonly string FilePath = @"C:\Users\user\Desktop\Backend\Projects\Student&BookManagment\Student_Book_Managment\JsonFolders\Students.json";
         public static async Task InitializeAsync()
         {
             StudentStorageData data = await JsonFIleStorage.Load<StudentStorageData>(FilePath);
@@ -69,7 +69,7 @@ namespace Student_Book_Managment.Services.StudentsService
 
                 foreach (Student student in studentsList)
                 {
-                    Console.WriteLine($"{student.ToString()}\n");
+                    Console.WriteLine(student);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace Student_Book_Managment.Services.StudentsService
                 {
                     foreach (Student student in students)
                     {
-                        Console.WriteLine($"Grade: [{grade}], Student: {student.ToString()}\n");
+                        Console.WriteLine($"Grade: [{grade}], Student: {student}");
                     }
                 }
             }
