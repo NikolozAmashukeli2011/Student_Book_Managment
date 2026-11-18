@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Student_Book_Managment.Exceptions
 {
-    internal class AppException : Exception
+    abstract class AppException : Exception
     {
         public DateTime ThrownAt { get; init; } = DateTime.UtcNow;
 

@@ -1,13 +1,12 @@
 ﻿using Student_Book_Managment.Exceptions;
 using Student_Book_Managment.Models.Books;
-using System.Runtime.InteropServices;
 
 namespace Student_Managment.Models
 {
     internal class Student
     {
-        public static readonly HashSet<char> grades = new HashSet<char>() { 'A', 'B', 'C', 'D', 'F' };
-        public HashSet<Book> BorrowedBooks = [];
+        public static readonly HashSet<char> grades = new HashSet<char>() { 'A', 'B', 'C', 'D', 'F' }; // set of chars which is used to prevent invalid grades via .contains().
+        public HashSet<Book> BorrowedBooks = []; // storing the set of books that this student has borrowed.
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int RollNum { get; set; }
@@ -45,10 +44,8 @@ namespace Student_Managment.Models
             }
 
         }
-        public static bool IsValidGrade(char grade)
-        {
-            return grades.Contains(grade);
-        }
+        public static bool IsValidGrade(char grade) => grades.Contains(grade); // preventing invalid grade arguments.
+
 
         public Student(string name, int rollNum, char grade)
         {

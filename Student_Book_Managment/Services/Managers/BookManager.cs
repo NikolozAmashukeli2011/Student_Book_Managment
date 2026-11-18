@@ -3,7 +3,7 @@ using Student_Book_Managment.Models.Books;
 
 namespace Student_Book_Managment.Services.Managers
 {
-    static class BookManager
+    static class BookManager // Manager class, which contains multiple data structures for fast lookups, and methods that operate on books data.
     {
         public static HashSet<Book> SetOfBooks = new HashSet<Book>();
         public static Dictionary<string, HashSet<Book>> AuthorToBooksSetMap = new Dictionary<string, HashSet<Book>>(StringComparer.OrdinalIgnoreCase);
@@ -14,18 +14,18 @@ namespace Student_Book_Managment.Services.Managers
 
         public static async Task InitializeAsync()
         {
-            BookStorageData data = await JsonFIleStorage.Load<BookStorageData>(FilePath);
+            BookStorageData data = await JsonFIleStorage.LoadAsync<BookStorageData>(FilePath);
 
             Book.Count = data.IdCount;
 
-            foreach (Book b in data.Books)
+            foreach (Book b in data.Books) // looping over BookStorageData.Books IEnumerable and refilling collections.
             {
                 AddToAll(b);
             }
         }
 
-        private static async void SaveAllAsync() => await JsonFIleStorage.Save(new BookStorageData(Book.Count, SetOfBooks), FilePath);
-
+        private static async void SaveAllAsync() => await JsonFIleStorage.SaveAsync(new BookStorageData(Book.Count, SetOfBooks), FilePath);
+            
         private static void AddToAll(Book b)
         {
             if (!AuthorToBooksSetMap.TryGetValue(b.Author, out HashSet<Book>? booksSet))

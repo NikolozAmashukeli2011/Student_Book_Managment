@@ -1,25 +1,17 @@
-﻿using Student_Book_Managment.Models.Books;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Student_Book_Managment.DataHandlers
 {
-    internal class JsonFIleStorage
+    static class JsonFIleStorage // one class having 2 generic async methods, that handle all the file work.
     {
         private static readonly JsonSerializerOptions Options = new JsonSerializerOptions() { WriteIndented = true };
 
-        public async static Task Save<T>(T data, string path)
+        public async static Task SaveAsync<T>(T data, string path)
         {
-            string json = JsonSerializer.Serialize(data, Options);
-
             try
             {
-                using (StreamWriter sw = new StreamWriter(path))
-                {
-                    sw.Write(json);
-                }
+                string json = JsonSerializer.Serialize(data, Options);
+                await File.WriteAllTextAsync(path, json);
             }
             catch (IOException ex)
             {
@@ -31,17 +23,14 @@ namespace Student_Book_Managment.DataHandlers
             }
         }
 
-        public async static Task<T> Load<T>(string path) where T: new()
+        public async static Task<T> LoadAsync<T>(string path) where T : new() // T : new() means T must be a type with an empty constructor.
         {
             if (!File.Exists(path)) return new T();
 
             try
             {
-                using (StreamReader sr = new StreamReader(path))
-                {
-                    string json = await sr.ReadToEndAsync();
-                    return JsonSerializer.Deserialize<T>(json, Options) ?? new T();
-                }
+                string json = await File.ReadAllTextAsync(path);
+                return JsonSerializer.Deserialize<T>(json, Options) ?? new T();
             }
             catch (IOException ex)
             {

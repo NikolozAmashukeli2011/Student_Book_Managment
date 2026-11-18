@@ -6,14 +6,14 @@ namespace Student_Book_Managment.Services.StudentsService
 {
     static class StudentManager
     {
-        public static List<Student> studentsList = new List<Student>();
-        public static SortedList<char, List<Student>> BestGradeToStudentsMap = new SortedList<char, List<Student>>();
-        public static Dictionary<int, List<Student>> RollToStudentsMap = new Dictionary<int, List<Student>>();
-        public static Dictionary<int, Student> IdToStudentMap = new Dictionary<int, Student>();
+        private static readonly List<Student> studentsList = new List<Student>();
+        private static readonly SortedList<char, List<Student>> BestGradeToStudentsMap = new SortedList<char, List<Student>>();
+        private static readonly Dictionary<int, List<Student>> RollToStudentsMap = new Dictionary<int, List<Student>>();
+        private static readonly Dictionary<int, Student> IdToStudentMap = new Dictionary<int, Student>();
         private static readonly string FilePath = @"C:\Users\user\Desktop\Backend\Projects\Student&BookManagment\Student_Book_Managment\JsonFolders\Students.json";
         public static async Task InitializeAsync()
         {
-            StudentStorageData data = await JsonFIleStorage.Load<StudentStorageData>(FilePath);
+            StudentStorageData data = await JsonFIleStorage.LoadAsync<StudentStorageData>(FilePath);
 
             Student.Count = data.IdCount;
 
@@ -23,7 +23,7 @@ namespace Student_Book_Managment.Services.StudentsService
             }
         }
 
-        private async static void SaveAllAsync() => await JsonFIleStorage.Save(new StudentStorageData(studentsList, Student.Count), FilePath);
+        private async static void SaveAllAsync() => await JsonFIleStorage.SaveAsync(new StudentStorageData(studentsList, Student.Count), FilePath);
 
         private static void AddToCollections(Student s)
         {
@@ -150,7 +150,6 @@ namespace Student_Book_Managment.Services.StudentsService
                 studentsList.Remove(student);
                 IdToStudentMap.Remove(student.Id);
                 RollToStudentsMap[student.RollNum].Remove(student);
-
                 SaveAllAsync();
                 return true;
             }
@@ -168,7 +167,6 @@ namespace Student_Book_Managment.Services.StudentsService
                 IdToStudentMap.Clear();
                 BestGradeToStudentsMap.Clear();
                 RollToStudentsMap.Clear();
-
                 SaveAllAsync();
                 return true;
             }

@@ -8,7 +8,8 @@ using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.MenuActions
 {
-    static class BookMenuActions
+    static class BookMenuActions // MenuAction folder contains 2 static classes (Book and Student MenuActions) that have actual complete methods,
+                                 // meaning: getting user input, calling manager methods, and displaying text based on the result.
     {
 
         public static void AddBook()

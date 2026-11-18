@@ -109,9 +109,9 @@ do
         methodChoice = Prompter.PromptGeneric<int>($"Input must be a number 1-{exitChoice}, try again: ", intErrTxt);
     }
 
-    if(methodChoice != exitChoice) // checking if the user's desired method matches with exit methods number. if it doesn't match,
-                                   // we run the action that is stored inside the actions dictionary with key of method of users choice.
-                                   // doing this so i dont get KeyNotFoundException.
+    if (methodChoice != exitChoice) // checking if the user's desired method matches with exit methods number. if it doesn't match,
+                                    // we run the action that is stored inside the actions dictionary with key of method of users choice.
+                                    // doing this so i dont get KeyNotFoundException.
     {
         actions[methodChoice]();
     }

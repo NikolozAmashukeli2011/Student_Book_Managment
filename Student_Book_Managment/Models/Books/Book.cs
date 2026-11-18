@@ -7,7 +7,7 @@ namespace Student_Book_Managment.Models.Books
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
-        public int? BorrowedByStudentId { get; set; } = null;
+        public int? BorrowedByStudentId { get; set; } = null; // nullable integer storing the id of the student who is currently borrowing it. default as null.
         private static int _Count = 0;
         public static int Count
         {
@@ -17,7 +17,7 @@ namespace Student_Book_Managment.Models.Books
             }
             set
             {
-                _Count = Math.Max(_Count, value);
+                _Count = Math.Max(_Count, value); // preventing id count from decreasing, it must only go up by 1 when constructor is called, and never decreased.
             }
         }
         private int _YearOfPublish;
@@ -30,7 +30,7 @@ namespace Student_Book_Managment.Models.Books
 
             set
             {
-                if (value < 1 || value > 2026)
+                if (value < 1 || value > DateTime.Now.Year)
                 {
                     throw new YearInvalidException();
                 }

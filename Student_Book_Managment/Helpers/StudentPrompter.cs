@@ -19,7 +19,7 @@ namespace Student_Book_Managment.Helpers
         {
             string name = Prompter.PromptString(txt, errTxt, retryTxt);
 
-            while (name.Any(c => char.IsDigit(c)))
+            while (name.Any(c => char.IsDigit(c))) // checking if atleast one char is a digit, if so, we make user input again.
             {
                 name = Prompter.PromptString(txt, retryTxt, errTxt);
             }

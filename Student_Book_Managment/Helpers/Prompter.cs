@@ -2,9 +2,9 @@
 
 namespace Student_Managment.Helpers
 {
-    static class Prompter
+    static class Prompter // a static helper class, whos sole purpose is to get user input, validate it, and run a loop while until the desired type is inputted, which is then returned.
     {
-        public static T PromptGeneric<T>(string startingTxt, string errTxt) where T : IParsable<T>
+        public static T PromptGeneric<T>(string startingTxt, string errTxt) where T : IParsable<T> // IParsable<T> means this type can be created from a string value.
         {
             T result;
 
@@ -50,13 +50,18 @@ namespace Student_Managment.Helpers
             return ChoiceIsYes();
         }
 
-        public static T PromptEnum<T>(string txt, string retryTxt, string errTxt, bool ignoreCase = true) where T : struct, Enum
+        public static T PromptEnum<T>(string txt, string retryTxt, string errTxt, bool ignoreCase = true) where T : struct, Enum // struct, Enum filter was neccessary,
+                                                                                                                                 // since Enum on its own allows all types that are derived from the built in enum class, including system.Enum itself, which is wrong.
+                                                                                                                                 // struct filter allows only value types, that include int, datetime and others, not only enum.
+                                                                                                                                 // both combined: only value types, that are derived from system.Enum.
+
         {
             T result;
 
             string input = PromptGeneric<string>(txt, errTxt).Trim();
 
-            while (!Enum.TryParse(input, ignoreCase, out result) || int.TryParse(input, out _))
+            while (!Enum.TryParse(input, ignoreCase, out result) || int.TryParse(input, out _)) // int.TryParse check is neccessary since enum members are numbers underneath (starting from 0),
+                                                                                                // and i want only text input to be valid from the user.
             {
                 input = PromptGeneric<string>(retryTxt, errTxt).Trim();
             }
