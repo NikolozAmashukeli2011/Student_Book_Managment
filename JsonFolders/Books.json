@@ -1,0 +1,19 @@
+{
+  "IdCount": 3,
+  "Books": [
+    {
+      "Id": 1,
+      "Title": "c#",
+      "Author": "mate",
+      "BorrowedByStudentId": null,
+      "YearOfPublish": 2025
+    },
+    {
+      "Id": 3,
+      "Title": "ts",
+      "Author": "microsoft dude",
+      "BorrowedByStudentId": null,
+      "YearOfPublish": 2011
+    }
+  ]
+}

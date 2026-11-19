@@ -49,7 +49,22 @@ namespace Student_Book_Managment.Services.StudentsService
         {
             if (Student.IsValidGrade(grade))
             {
-                student.Grade = grade;
+                char pastGrade = student.Grade; // storing the students past grade before updating it.
+                student.Grade = grade; // modifying students grade with passed in grade.
+
+                BestGradeToStudentsMap[pastGrade].Remove(student); // removing the student from list of students keyed by past grade.
+
+                if (BestGradeToStudentsMap.ContainsKey(grade)) // if key exists, add student to that list (value).
+                {
+                    BestGradeToStudentsMap[grade].Add(student);
+                }
+                else
+                {
+                    List<Student> students = [student];
+                    BestGradeToStudentsMap.Add(grade, students); // otherwise create new kvp, key being the grade, value being new list of students containing the student.
+                }
+
+                SaveAllAsync(); // saving to json files after modifying collection.
             }
             else
             {
@@ -108,9 +123,9 @@ namespace Student_Book_Managment.Services.StudentsService
                 else
                 {
                     foundStudents = foundList;
+                    return true;
                 }
 
-                return true;
             }
             else
             {
@@ -119,13 +134,8 @@ namespace Student_Book_Managment.Services.StudentsService
         }
 
         public static bool IdIsValid(int id) => IdToStudentMap.ContainsKey(id);
-
-        public static bool FindStudentById(int id, out Student? foundStudent)
-        {
-            return IdToStudentMap.TryGetValue(id, out foundStudent);
-        }
-
-        private static bool StudentExists(Student student) => IdToStudentMap.ContainsKey(student.Id);
+        private static bool StudentExists(Student student) => IdIsValid(student.Id);
+        public static bool FindStudentById(int id, out Student? foundStudent) => IdToStudentMap.TryGetValue(id, out foundStudent);
 
         public static bool AddStudent(Student student)
         {
@@ -175,5 +185,6 @@ namespace Student_Book_Managment.Services.StudentsService
                 return false;
             }
         }
+
     }
 }

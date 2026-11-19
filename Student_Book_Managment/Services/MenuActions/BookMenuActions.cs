@@ -31,16 +31,6 @@ namespace Student_Book_Managment.Services.MenuActions
 
         public static void BorrowBook()
         {
-            int studentId = StudentPrompter.PromptId();
-
-            if (!StudentManager.IdIsValid(studentId))
-            {
-                Console.WriteLine($"Student with id: {studentId} Couldn't be found!");
-                return;
-            }
-
-            StudentManager.FindStudentById(studentId, out Student? student);
-
             int bookId = BookPrompter.PromptId();
 
             if (!BookManager.IdIsValid(bookId))
@@ -53,9 +43,9 @@ namespace Student_Book_Managment.Services.MenuActions
 
             try
             {
-                LibraryManager.BorrowBook(student!, book!);
+                LibraryManager.BorrowBook(Session.CurrentStudent!, book!);
 
-                Console.WriteLine($"{book!.Title} borrowed successfully!");
+                Console.WriteLine($"{Session.CurrentStudent!.Name} borrowed {book!.Title} successfully!");
             }
             catch (BookBorrowedException ex)
             {
@@ -65,16 +55,6 @@ namespace Student_Book_Managment.Services.MenuActions
 
         public static void ReturnBook()
         {
-            int studentId = StudentPrompter.PromptId();
-
-            if (!StudentManager.IdIsValid(studentId))
-            {
-                Console.WriteLine($"\nStudent with id: {studentId} Couldn't be found!");
-                return;
-            }
-
-            StudentManager.FindStudentById(studentId, out Student? student);
-
             int bookId = BookPrompter.PromptId();
 
             if (!BookManager.IdIsValid(bookId))
@@ -83,7 +63,7 @@ namespace Student_Book_Managment.Services.MenuActions
                 return;
             }
 
-            if (LibraryManager.ReturnBook(student!, bookId))
+            if (LibraryManager.ReturnBook(Session.CurrentStudent!, bookId))
             {
                 Console.WriteLine("\nBook returned successfully!");
             }
@@ -93,19 +73,7 @@ namespace Student_Book_Managment.Services.MenuActions
             }
         }
 
-        public static void DisplayBorrowedBooks()
-        {
-            int studentId = StudentPrompter.PromptId();
-
-            if (!StudentManager.FindStudentById(studentId, out Student? foundStudent))
-            {
-                Console.WriteLine($"Student with id: {studentId} couldn't be found!\n");
-            }
-            else
-            {
-                LibraryManager.DisplayBorrowedBooks(foundStudent!);
-            }
-        }
+        public static void DisplayBorrowedBooks() => LibraryManager.DisplayBorrowedBooks(Session.CurrentStudent!);
 
         public static void FindBookByTitle()
         {

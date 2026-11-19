@@ -33,21 +33,21 @@ namespace Student_Managment.Helpers
         }
 
         public static bool PromptChoice(string txt = "Input your choice (Yes or No): ", string errTxt = "Input must be either Yes, or No, try again: ",
-           string retryTxt = "Input must be either yes, or no, try again: ")
+           string retryTxt = "Input must be either yes, or no, try again: ", string choice1 = "Yes", string choice2 = "No")
         {
 
             string choice = PromptString(txt, errTxt).Trim();
 
-            bool ChoiceIsYes() => string.Equals(choice, "Yes", StringComparison.OrdinalIgnoreCase);
+            bool ChoiceIsFirst() => string.Equals(choice, choice1, StringComparison.OrdinalIgnoreCase);
 
-            bool ChoiceIsNo() => string.Equals(choice, "No", StringComparison.OrdinalIgnoreCase);
+            bool ChoiceIsSecond() => string.Equals(choice, choice2, StringComparison.OrdinalIgnoreCase);
 
-            while (!ChoiceIsYes() && !ChoiceIsNo())
+            while (!ChoiceIsFirst() && !ChoiceIsSecond())
             {
                 choice = PromptGeneric<string>(retryTxt, errTxt).Trim();
             }
 
-            return ChoiceIsYes();
+            return ChoiceIsFirst();
         }
 
         public static T PromptEnum<T>(string txt, string retryTxt, string errTxt, bool ignoreCase = true) where T : struct, Enum // struct, Enum filter was neccessary,
