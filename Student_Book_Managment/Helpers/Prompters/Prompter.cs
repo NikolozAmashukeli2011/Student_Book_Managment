@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Student_Managment.Helpers
+namespace Student_Book_Managment.Helpers.Prompters
 {
     static class Prompter // a static helper class, whos sole purpose is to get user input, validate it, and run a loop while until the desired type is inputted, which is then returned.
     {

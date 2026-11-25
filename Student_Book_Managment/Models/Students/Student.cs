@@ -1,4 +1,5 @@
-﻿using Student_Book_Managment.Exceptions;
+﻿using Student_Book_Managment.Attributes;
+using Student_Book_Managment.Exceptions;
 using Student_Book_Managment.Models.Books;
 
 namespace Student_Managment.Models
@@ -11,6 +12,7 @@ namespace Student_Managment.Models
         public string Name { get; set; } = string.Empty;
         public int RollNum { get; set; }
         private static int _Count = 0;
+        [HideInTable]
         public static int Count
         {
             get

@@ -1,8 +1,7 @@
 ﻿using Student_Book_Managment.Models.Books;
 using Student_Book_Managment.Services.Managers;
-using Student_Managment.Helpers;
 
-namespace Student_Book_Managment.Helpers
+namespace Student_Book_Managment.Helpers.Prompters
 {
     internal class BookPrompter // Pretty much the same as Prompter class, just dedicated to Books.
     {

@@ -1,10 +1,10 @@
-﻿using Student_Book_Managment.Enums;
-using Student_Book_Managment.Helpers;
+﻿using Spectre.Console;
+using Student_Book_Managment.Enums;
+using Student_Book_Managment.Helpers.Prompters;
 using Student_Book_Managment.Services;
 using Student_Book_Managment.Services.Managers;
 using Student_Book_Managment.Services.MenuActions;
 using Student_Book_Managment.Services.StudentsService;
-using Student_Managment.Helpers;
 using Student_Managment.Models;
 
 await StudentManager.InitializeAsync(); // InitilizeAsync method reads the data from the json files asynchronously, and refills the collections of manager classes.
@@ -42,12 +42,12 @@ if (userRole == Roles.Student)
     }
     else
     {
-        Console.WriteLine($"Student with id: {userId} couldn't be found. would you like to change roles, or retry?\n");
+        Console.WriteLine($"Student with id: {userId} couldn't be found. would you like to change roles, retry, or Exit?\n");
         Console.WriteLine("1. retry\n" + "2. role\n" + "3. Exit\n");
 
         int nextActionNum = Prompter.PromptGeneric<int>("Input your next action (1-3): ", intErrTxt);
 
-        while (nextActionNum < 1 && nextActionNum > 3)
+        while (nextActionNum < 1 || nextActionNum > 3)
         {
             nextActionNum = Prompter.PromptGeneric<int>("Input must be your next action, either 1 or 3, try again: ", intErrTxt);
         }
@@ -67,17 +67,17 @@ if (userRole == Roles.Student)
     }
 
     textBasedOnRole =
-    "\n[LIBRARY]\n" +
+    "\n[bold green][[LIBRARY]][/]\n" +
     "1. Borrow a book.\n" +
     "2. Return a book.\n" +
-    "\n[DISPLAY]\n" +
+    "\n[bold cyan][[DISPLAY]][/]\n" +
     "3. Display borrowed books.\n" +
     "4. Display all books.\n" +
     "5. Display books by year.\n" +
-    "\n[FIND]\n" +
+    "\n[bold magenta][[FIND]][/]\n" +
     "6. Find book by id.\n" +
     "7. Find book by title.\n" +
-    "\n[EXIT]\n" +
+    "\n[bold grey][[EXIT]][/]\n" +
     "8. Exit.\n";
 
     actions = new()
@@ -94,27 +94,27 @@ if (userRole == Roles.Student)
 else
 {
     textBasedOnRole =
-        "\n[ADD]\n" +
+        "\n[bold green][[ADD]][/]\n" +
         "1. Add a student.\n" +
         "2. Add a book.\n" +
-        "\n[UPDATE]\n" +
+        "\n[bold yellow][[UPDATE]][/]\n" +
         "3. Update student’s grade.\n" +
-        "\n[DISPLAY]\n" +
+        "\n[bold cyan][[DISPLAY]][/]\n" +
         "4. Display all students.\n" +
         "5. Display students by grade.\n" +
         "6. Display all books.\n" +
         "7. Display books by year.\n" +
-        "\n[FIND]\n" +
+        "\n[bold magenta][[FIND]][/]\n" +
         "8. Find book by id.\n" +
         "9. Find book by title.\n" +
         "10. Find student by id.\n" +
         "11. Find students by roll number.\n" +
-        "\n[REMOVE]\n" +
+        "\n[bold red][[REMOVE]][/]\n" +
         "12. Remove student by id.\n" +
         "13. Remove book by id.\n" +
         "14. Remove all students.\n" +
         "15. Remove all books.\n" +
-        "\n[EXIT]\n" +
+        "\n[bold grey][[EXIT]][/]\n" +
         "16. Exit.\n";
 
     actions = new() // Matching the method number to the methods reference.
@@ -141,7 +141,7 @@ exitChoice = actions.Count + 1;
 
 do
 {
-    Console.WriteLine(textBasedOnRole);
+    AnsiConsole.MarkupLine(textBasedOnRole);
 
     methodChoice = Prompter.PromptGeneric<int>($"Input a number (1-{exitChoice}): ", intErrTxt);
 

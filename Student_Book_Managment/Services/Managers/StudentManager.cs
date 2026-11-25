@@ -1,5 +1,7 @@
-﻿using Student_Book_Managment.DataHandlers;
+﻿using Spectre.Console;
+using Student_Book_Managment.DataHandlers;
 using Student_Book_Managment.Exceptions;
+using Student_Book_Managment.Helpers;
 using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.StudentsService
@@ -11,6 +13,7 @@ namespace Student_Book_Managment.Services.StudentsService
         private static readonly Dictionary<int, List<Student>> RollToStudentsMap = new Dictionary<int, List<Student>>();
         private static readonly Dictionary<int, Student> IdToStudentMap = new Dictionary<int, Student>();
         private static readonly string FilePath = @"C:\Users\user\Desktop\Backend\Projects\Student&BookManagment\Student_Book_Managment\JsonFolders\Students.json";
+
         public static async Task InitializeAsync()
         {
             StudentStorageData data = await JsonFIleStorage.LoadAsync<StudentStorageData>(FilePath);
@@ -84,7 +87,8 @@ namespace Student_Book_Managment.Services.StudentsService
 
                 foreach (Student student in studentsList)
                 {
-                    Console.WriteLine(student);
+                    TablePrinter.PrintObj(student, columnColor: Color.Aqua,
+                              roundedCorners: true, borderColor: Color.Blue);
                 }
             }
         }

@@ -1,9 +1,8 @@
 ﻿using Student_Book_Managment.Exceptions;
-using Student_Book_Managment.Helpers;
+using Student_Book_Managment.Helpers.Prompters;
 using Student_Book_Managment.Models.Books;
 using Student_Book_Managment.Services.Managers;
 using Student_Book_Managment.Services.StudentsService;
-using Student_Managment.Helpers;
 using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.MenuActions

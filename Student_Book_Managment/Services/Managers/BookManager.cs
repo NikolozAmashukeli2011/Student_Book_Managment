@@ -1,6 +1,7 @@
 ﻿using Student_Book_Managment.DataHandlers;
+using Student_Book_Managment.Helpers;
 using Student_Book_Managment.Models.Books;
-
+using Spectre.Console;
 namespace Student_Book_Managment.Services.Managers
 {
     static class BookManager // Manager class, which contains multiple data structures for fast lookups, and methods that operate on books data.
@@ -77,7 +78,8 @@ namespace Student_Book_Managment.Services.Managers
 
                 foreach (Book book in SetOfBooks)
                 {
-                    Console.WriteLine(book);
+                    TablePrinter.PrintObj(book, borderColor: Color.Green, columnColor: Color.Lime,
+                                          roundedCorners: true, title: "Book");
                 }
             }
 

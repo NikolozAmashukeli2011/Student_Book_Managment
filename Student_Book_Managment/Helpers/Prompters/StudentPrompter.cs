@@ -1,13 +1,12 @@
 ﻿using Student_Book_Managment.Models.Books;
 using Student_Book_Managment.Services.Managers;
 using Student_Book_Managment.Services.StudentsService;
-using Student_Managment.Helpers;
 using Student_Managment.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Student_Book_Managment.Helpers
+namespace Student_Book_Managment.Helpers.Prompters
 {
     internal class StudentPrompter
     {

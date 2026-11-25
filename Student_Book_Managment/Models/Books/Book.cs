@@ -1,4 +1,5 @@
-﻿using Student_Book_Managment.Exceptions;
+﻿using Student_Book_Managment.Attributes;
+using Student_Book_Managment.Exceptions;
 
 namespace Student_Book_Managment.Models.Books
 {
@@ -7,6 +8,7 @@ namespace Student_Book_Managment.Models.Books
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
+        [HideInTable]
         public int? BorrowedByStudentId { get; set; } = null; // nullable integer storing the id of the student who is currently borrowing it. default as null.
         private static int _Count = 0;
         public static int Count
