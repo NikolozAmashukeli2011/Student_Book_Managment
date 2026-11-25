@@ -1,4 +1,7 @@
-﻿using Student_Book_Managment.Helpers.Prompters;
+﻿using Student_Book_Managment.Helpers.Printers;
+using Student_Book_Managment.Helpers.Printers.TableStyles;
+using Student_Book_Managment.Helpers.Prompters;
+using Student_Book_Managment.Helpers.UI.Printers;
 using Student_Book_Managment.Services.StudentsService;
 using Student_Managment.Models;
 
@@ -14,13 +17,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (success)
             {
-                Console.WriteLine("Student added successfully!\n");
-                Console.WriteLine(studentToAdd);
-
+                MarkupPrinter.PrintSuccess("Student added successfully!\n");
+                TablePrinter.PrintObj(studentToAdd, MethodStyles.AddStyles);
             }
             else
             {
-                Console.WriteLine("adding the Student failed!\n");
+                MarkupPrinter.PrintError("adding the Student failed!\n");
             }
         }
 
@@ -32,7 +34,7 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (foundStudent == null)
             {
-                Console.WriteLine($"Student with id: {id} couldn't be found!\n");
+                MarkupPrinter.PrintError($"Student with id: {id} couldn't be found!\n");
             }
             else
             {
@@ -40,7 +42,7 @@ namespace Student_Book_Managment.Services.MenuActions
 
                 StudentManager.ModifyGrade(foundStudent!, grade);
 
-                Console.WriteLine("\nStudent's grade modified successfully!");
+                MarkupPrinter.PrintSuccess("\nStudent's grade modified successfully!");
             }
         }
 
@@ -53,12 +55,12 @@ namespace Student_Book_Managment.Services.MenuActions
             if (foundSuccessfully)
             {
                 StudentManager.RemoveStudent(student!);
-                Console.WriteLine("Student removed successfully!\n");
-                Console.WriteLine(student!);
+                MarkupPrinter.PrintSuccess("Student removed successfully!\n");
+                TablePrinter.PrintObj(student!, MethodStyles.RemoveStyles);
             }
             else
             {
-                Console.WriteLine($"\nStudent with id: {id} couldn't be found.\n");
+                MarkupPrinter.PrintError($"\nStudent with id: {id} couldn't be found.\n");
             }
         }
 
@@ -71,18 +73,18 @@ namespace Student_Book_Managment.Services.MenuActions
             if (success)
             {
                 {
-                    Console.WriteLine($"\n[ROLL {rollNum}]\n");
+                    MarkupPrinter.PrintColoredHeader($"ROLL [{rollNum}]", MethodStyles.FindStyles);
 
                     foreach (Student student in students!)
                     {
-                        Console.WriteLine(student);
+                        TablePrinter.PrintObj(student, MethodStyles.FindStyles);
                     }
                 }
 
             }
             else
             {
-                Console.WriteLine($"Students in roll number: {rollNum} couldn't be found.\n");
+                MarkupPrinter.PrintError($"Students in roll number: {rollNum} couldn't be found.\n");
             }
         }
         public static void FindStudentByIdAction()
@@ -93,12 +95,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (foundSuccessfully)
             {
-                Console.WriteLine("Student found successfully!\n");
-                Console.WriteLine(student!);
+                MarkupPrinter.PrintSuccess("Student found successfully!\n");
+                TablePrinter.PrintObj(student!, MethodStyles.FindStyles);
             }
             else
             {
-                Console.WriteLine($"Student with id: {id} couldn't be found.\n");
+                MarkupPrinter.PrintError($"Student with id: {id} couldn't be found.\n");
             }
         }
 
@@ -111,11 +113,11 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 if (StudentManager.RemoveAllStudents())
                 {
-                    Console.WriteLine("\nStudents removed successfully!");
+                    MarkupPrinter.PrintSuccess("\nStudents removed successfully!");
                 }
                 else
                 {
-                    Console.WriteLine("\nThere are no students!");
+                    MarkupPrinter.PrintError("\nThere are no students!");
                 }
             }
         }

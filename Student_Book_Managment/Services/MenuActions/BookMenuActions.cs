@@ -1,5 +1,9 @@
-﻿using Student_Book_Managment.Exceptions;
+﻿using Spectre.Console;
+using Student_Book_Managment.Exceptions;
+using Student_Book_Managment.Helpers.Printers;
+using Student_Book_Managment.Helpers.Printers.TableStyles;
 using Student_Book_Managment.Helpers.Prompters;
+using Student_Book_Managment.Helpers.UI.Printers;
 using Student_Book_Managment.Models.Books;
 using Student_Book_Managment.Services.Managers;
 using Student_Book_Managment.Services.StudentsService;
@@ -10,7 +14,6 @@ namespace Student_Book_Managment.Services.MenuActions
     static class BookMenuActions // MenuAction folder contains 2 static classes (Book and Student MenuActions) that have actual complete methods,
                                  // meaning: getting user input, calling manager methods, and displaying text based on the result.
     {
-
         public static void AddBook()
         {
             Book book = BookPrompter.PromptBook();
@@ -19,12 +22,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (success)
             {
-                Console.WriteLine("Book added successfully!\n");
-                Console.WriteLine(book);
+                MarkupPrinter.PrintSuccess("Book added successfully!\n");
+                TablePrinter.PrintObj(book, MethodStyles.AddStyles);
             }
             else
             {
-                Console.WriteLine("Adding the book failed!\n");
+                MarkupPrinter.PrintError("Adding the book failed!\n");
             }
         }
 
@@ -34,7 +37,7 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (!BookManager.IdIsValid(bookId))
             {
-                Console.WriteLine($"Book with id: {bookId} doesn't exist!");
+                MarkupPrinter.PrintError($"Book with id: {bookId} doesn't exist!\n");
                 return;
             }
 
@@ -44,11 +47,11 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 LibraryManager.BorrowBook(Session.CurrentStudent!, book!);
 
-                Console.WriteLine($"{Session.CurrentStudent!.Name} borrowed {book!.Title} successfully!");
+                MarkupPrinter.PrintSuccess($"{Session.CurrentStudent!.Name} borrowed {book!.Title} successfully!");
             }
             catch (BookBorrowedException ex)
             {
-                Console.WriteLine($"{ex.Message}. Thrown at: {ex.ThrownAt}");
+                MarkupPrinter.PrintError($"{ex.Message}. Thrown at: {ex.ThrownAt}");
             }
         }
 
@@ -58,17 +61,17 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (!BookManager.IdIsValid(bookId))
             {
-                Console.WriteLine($"\nBook with id: {bookId} Couldn't be found!");
+                MarkupPrinter.PrintError($"\nBook with id: {bookId} Couldn't be found!");
                 return;
             }
 
             if (LibraryManager.ReturnBook(Session.CurrentStudent!, bookId))
             {
-                Console.WriteLine("\nBook returned successfully!");
+                MarkupPrinter.PrintSuccess("\nBook returned successfully!");
             }
             else
             {
-                Console.WriteLine("\nYou haven't even borrowed this book!");
+                MarkupPrinter.PrintError("\nYou haven't even borrowed this book!");
             }
         }
 
@@ -80,12 +83,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (BookManager.GetBookByTitle(title, out Book? foundBook))
             {
-                Console.WriteLine("\nBook found.\n");
-                Console.WriteLine(foundBook);
+                MarkupPrinter.PrintSuccess("\nBook found!\n");
+                TablePrinter.PrintObj(foundBook!, MethodStyles.FindStyles);
             }
             else
             {
-                Console.WriteLine($"Book with title: {title} couldn't be found.\n");
+                MarkupPrinter.PrintError($"Book with title: {title} couldn't be found.\n");
             }
         }
 
@@ -95,12 +98,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (BookManager.GetBookById(id, out Book? foundBook))
             {
-                Console.WriteLine("\nBook found.\n");
-                Console.WriteLine(foundBook);
+                MarkupPrinter.PrintSuccess("\nBook found!\n");
+                TablePrinter.PrintObj(foundBook!, MethodStyles.FindStyles);
             }
             else
             {
-                Console.WriteLine($"\nBook with id: {id} couldn't be found.");
+                MarkupPrinter.PrintError($"\nBook with id: {id} couldn't be found.");
             }
         }
 
@@ -112,12 +115,12 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 BookManager.RemoveBook(foundBook!);
 
-                Console.WriteLine("Book removed successfully!\n");
-                Console.WriteLine(foundBook!);
+                MarkupPrinter.PrintSuccess("Book removed successfully!\n");
+                TablePrinter.PrintObj(foundBook!, MethodStyles.RemoveStyles);
             }
             else
             {
-                Console.WriteLine($"\nBook with id: {id} couldn't be found.");
+                MarkupPrinter.PrintError($"\nBook with id: {id} couldn't be found.");
             }
 
         }
@@ -130,11 +133,11 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 if (BookManager.RemoveAllBooks())
                 {
-                    Console.WriteLine("\nBooks removed successfully!");
+                    MarkupPrinter.PrintSuccess("\nBooks removed successfully!");
                 }
                 else
                 {
-                    Console.WriteLine("\nThere are no Books!");
+                    MarkupPrinter.PrintError("\nThere are no Books!");
                 }
             }
         }

@@ -1,7 +1,8 @@
-﻿using Spectre.Console;
-using Student_Book_Managment.DataHandlers;
+﻿using Student_Book_Managment.DataHandlers;
 using Student_Book_Managment.Exceptions;
-using Student_Book_Managment.Helpers;
+using Student_Book_Managment.Helpers.Printers;
+using Student_Book_Managment.Helpers.Printers.TableStyles;
+using Student_Book_Managment.Helpers.UI.Printers;
 using Student_Managment.Models;
 
 namespace Student_Book_Managment.Services.StudentsService
@@ -13,7 +14,6 @@ namespace Student_Book_Managment.Services.StudentsService
         private static readonly Dictionary<int, List<Student>> RollToStudentsMap = new Dictionary<int, List<Student>>();
         private static readonly Dictionary<int, Student> IdToStudentMap = new Dictionary<int, Student>();
         private static readonly string FilePath = @"C:\Users\user\Desktop\Backend\Projects\Student&BookManagment\Student_Book_Managment\JsonFolders\Students.json";
-
         public static async Task InitializeAsync()
         {
             StudentStorageData data = await JsonFIleStorage.LoadAsync<StudentStorageData>(FilePath);
@@ -79,16 +79,15 @@ namespace Student_Book_Managment.Services.StudentsService
         {
             if (studentsList.Count == 0)
             {
-                Console.WriteLine("\nThere are no students.");
+                MarkupPrinter.PrintError("There are no students.");
             }
             else
             {
-                Console.WriteLine("\n[STUDENTS]\n");
+                MarkupPrinter.PrintColoredHeader("STUDENTS", MethodStyles.DisplayStyles);
 
                 foreach (Student student in studentsList)
                 {
-                    TablePrinter.PrintObj(student, columnColor: Color.Aqua,
-                              roundedCorners: true, borderColor: Color.Blue);
+                    TablePrinter.PrintObj(student, MethodStyles.DisplayStyles);
                 }
             }
         }
@@ -97,17 +96,19 @@ namespace Student_Book_Managment.Services.StudentsService
         {
             if (BestGradeToStudentsMap.Count == 0)
             {
-                Console.WriteLine("\nThere are no students.");
+                MarkupPrinter.PrintError("There are no students.");
             }
             else
             {
-                Console.WriteLine("\n[STUDENTS BY GRADE]\n");
+                MarkupPrinter.PrintColoredHeader("STUDENTS BY GRADE", MethodStyles.DisplayStyles);
 
                 foreach ((char grade, List<Student> students) in BestGradeToStudentsMap)
                 {
+                    MarkupPrinter.PrintColoredHeader(grade.ToString(), MethodStyles.DisplayStyles);
+
                     foreach (Student student in students)
                     {
-                        Console.WriteLine($"Grade: [{grade}], Student: {student}");
+                        TablePrinter.PrintObj(student, MethodStyles.DisplayStyles);
                     }
                 }
             }

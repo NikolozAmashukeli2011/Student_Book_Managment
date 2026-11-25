@@ -1,40 +1,38 @@
 ﻿using Spectre.Console;
+using Student_Book_Managment.Attributes;
+using Student_Book_Managment.Helpers.UI.Styles;
 using System.Reflection;
 
-namespace Student_Book_Managment.Helpers
+namespace Student_Book_Managment.Helpers.Printers
 {
     static class TablePrinter
     {
-        public static void PrintObj<T>(T obj, Color? rowColor = null, Color? rowBackgroundColor = null,
-        Color? columnColor = null, Color? columnBackgroundColor = null, Color? borderColor = null,
-        bool roundedCorners = false, string? title = null, string? caption = null) where T : class
+        public static void PrintObj<T>(T obj, TablePrinterOptions opt) where T : class
         {
-            List<PropertyInfo> properties = obj!.GetType().GetProperties().ToList();
+            List<PropertyInfo> properties = obj.GetType().GetProperties().ToList();
+            properties.RemoveAll(p => p.IsDefined(typeof(HideInTableAttribute), false)); // removing properties that have hideInTable attribute.
             List<string> propertyNames = properties.Select(p => p.Name).ToList();
 
-            PrintCustom(obj, properties, propertyNames, rowColor: rowColor, rowBackgroundColor: rowBackgroundColor, columnColor: columnColor,
-            columnBackgroundColor: columnBackgroundColor, borderColor: borderColor, roundedCorners: roundedCorners, title: title, caption: caption);
+            Print(obj: obj, props: properties, vals: propertyNames, propNameIsCol: true, opt: opt);
         }
 
-        public static void PrintCustom<T>(T obj, List<PropertyInfo> props, List<string> vals, bool propNameIsCol = true,
-        Color? rowBackgroundColor = null, Color? columnColor = null, Color? columnBackgroundColor = null, Color? rowColor = null,
-        Color? borderColor = null, bool roundedCorners = false, string? title = null, string? caption = null) where T : class
+        private static void Print<T>(TablePrinterOptions opt, T obj, List<PropertyInfo> props,
+            List<string> vals, bool propNameIsCol = true) where T : class
         {
-
-            Color rowTxtClr = rowColor ?? Color.White; // defining table styling/text by checking if parameters are null, if they are, default to white/empty string.
-            Color rowBgClr = rowBackgroundColor ?? Color.Default;
-            Color clmnTxtClr = columnColor ?? Color.White;
-            Color clmBgClr = columnBackgroundColor ?? Color.Default;
-            Color brdClr = borderColor ?? Color.White;
-            string ttl = title ?? string.Empty;
-            string cptn = caption ?? string.Empty;
+            Color rowTxtClr = opt.RowColor ?? Color.White; // defining table styling/text by checking if parameters are null, if they are, default to white/empty string.
+            Color rowBgClr = opt.RowBackgroundColor ?? Color.Default;
+            Color clmnTxtClr = opt.ColumnColor ?? Color.White;
+            Color clmBgClr = opt.ColumnBackgroundColor ?? Color.Default;
+            Color brdClr = opt.BorderColor ?? Color.White;
+            string ttl = opt.Title ?? string.Empty;
+            string cptn = opt.Caption ?? string.Empty;
 
             Table table = new Table() // making table object + applying styling.
                         .BorderColor(brdClr)
                         .Title(ttl)
                         .Caption(cptn);
 
-            if (roundedCorners)
+            if (opt.RoundedCorners)
             {
                 table.RoundedBorder(); // aplying rounded borders if rounded corners param is true.
             }
@@ -52,13 +50,13 @@ namespace Student_Book_Managment.Helpers
                     Text rowCell = new Text(rowVal, new Style(foreground: rowTxtClr, background: rowBgClr)); // creating text object, passing in the row cells value and styling as arguments.
                     rowCells.Add(rowCell); // added rowCell to row cells list.
                     Text columnCell = new Text(val, new Style(foreground: clmnTxtClr, background: clmBgClr)); // creating text object, passing in the column cells value and styling as arguments.
-                    table.AddColumn(new TableColumn(columnCell)); // adding properties name as the column cell.
+                    table.AddColumn(new TableColumn(columnCell).Centered()); // adding properties name as the column cell.
                 }
                 else
                 {
-                    string colVal = prop.GetValue(obj)?.ToString() ?? ""; // we do the opposite here (Column cell is the properties value, and Row cell is a properties name.
+                    string colVal = prop.GetValue(obj)?.ToString() ?? ""; // we do the opposite here. Column cell is the properties value, and Row cell is a properties name.
                     Text columnCell = new Text(colVal, new Style(foreground: clmnTxtClr, background: clmBgClr));
-                    table.AddColumn(new TableColumn(columnCell));
+                    table.AddColumn(new TableColumn(columnCell).Centered());
                     rowCells.Add(new Text(val, new Style(foreground: rowTxtClr, background: rowBgClr)));
                 }
             }

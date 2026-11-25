@@ -1,7 +1,9 @@
 ﻿using Student_Book_Managment.DataHandlers;
-using Student_Book_Managment.Helpers;
 using Student_Book_Managment.Models.Books;
 using Spectre.Console;
+using Student_Book_Managment.Helpers.Printers.TableStyles;
+using Student_Book_Managment.Helpers.UI.Printers;
+using Student_Book_Managment.Helpers.Printers;
 namespace Student_Book_Managment.Services.Managers
 {
     static class BookManager // Manager class, which contains multiple data structures for fast lookups, and methods that operate on books data.
@@ -70,16 +72,15 @@ namespace Student_Book_Managment.Services.Managers
         {
             if (SetOfBooks.Count == 0)
             {
-                Console.WriteLine("\nThere are no books.");
+                MarkupPrinter.PrintError("There are no books.");
             }
             else
             {
-                Console.WriteLine("\n[SET OF BOOKS]\n");
+                MarkupPrinter.PrintColoredHeader("BOOKS", MethodStyles.DisplayStyles);
 
                 foreach (Book book in SetOfBooks)
                 {
-                    TablePrinter.PrintObj(book, borderColor: Color.Green, columnColor: Color.Lime,
-                                          roundedCorners: true, title: "Book");
+                    TablePrinter.PrintObj(book, MethodStyles.DisplayStyles);
                 }
             }
 
@@ -89,19 +90,19 @@ namespace Student_Book_Managment.Services.Managers
         {
             if (YearToBooksSortedList.Count == 0)
             {
-                Console.WriteLine("\nThere are no books.");
+                MarkupPrinter.PrintError("There are no books.");
             }
             else
             {
-                Console.WriteLine("\n[BOOKS BY YEAR]\n");
+                MarkupPrinter.PrintColoredHeader("BOOKS BY YEAR", MethodStyles.DisplayStyles);
 
                 foreach ((int year, HashSet<Book> books) in YearToBooksSortedList)
                 {
-                    Console.WriteLine($"[{year}]\n");
+                    MarkupPrinter.PrintColoredHeader($"{year}", MethodStyles.DisplayStyles);
 
                     foreach (Book book in books)
                     {
-                        Console.WriteLine(book);
+                        TablePrinter.PrintObj(book, MethodStyles.DisplayStyles);
                     }
                 }
             }

@@ -11,6 +11,7 @@ namespace Student_Book_Managment.Models.Books
         [HideInTable]
         public int? BorrowedByStudentId { get; set; } = null; // nullable integer storing the id of the student who is currently borrowing it. default as null.
         private static int _Count = 0;
+        [HideInTable]
         public static int Count
         {
             get

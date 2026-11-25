@@ -1,10 +1,4 @@
-﻿using Student_Book_Managment.Models.Books;
-using Student_Book_Managment.Services.Managers;
-using Student_Book_Managment.Services.StudentsService;
-using Student_Managment.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Student_Managment.Models;
 
 namespace Student_Book_Managment.Helpers.Prompters
 {
@@ -18,7 +12,7 @@ namespace Student_Book_Managment.Helpers.Prompters
         {
             string name = Prompter.PromptString(txt, errTxt, retryTxt);
 
-            while (name.Any(c => char.IsDigit(c))) // checking if atleast one char is a digit, if so, we make user input again.
+            while (name.Any(char.IsDigit)) // checking if atleast one char is a digit, if so, we make user input again.
             {
                 name = Prompter.PromptString(txt, retryTxt, errTxt);
             }
@@ -32,7 +26,7 @@ namespace Student_Book_Managment.Helpers.Prompters
         {
             char grade = char.ToUpper(Prompter.PromptGeneric<char>("Input student's grade: ", "Grade must be a char, try again: "));
 
-            while(!Student.IsValidGrade(grade))
+            while (!Student.IsValidGrade(grade))
             {
                 grade = char.ToUpper(Prompter.PromptGeneric<char>("Input must be a char (A-F, excluding E), try again: ", "Grade must be a char, try again: "));
             }
