@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Student_Book_Managment.Helpers.UI.Printers;
+using System.Globalization;
 
 namespace Student_Book_Managment.Helpers.Prompters
 {
@@ -13,7 +14,7 @@ namespace Student_Book_Managment.Helpers.Prompters
 
             while (!T.TryParse(input, CultureInfo.InvariantCulture, out result!))
             {
-                Console.WriteLine(errTxt);
+                MarkupPrinter.PrintError(errTxt);
                 input = Console.ReadLine();
             }
 

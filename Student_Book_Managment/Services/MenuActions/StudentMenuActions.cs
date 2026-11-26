@@ -40,9 +40,13 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 char grade = StudentPrompter.PromptGrade();
 
-                StudentManager.ModifyGrade(foundStudent!, grade);
-
-                MarkupPrinter.PrintSuccess("\nStudent's grade modified successfully!");
+                if (StudentManager.ModifyGrade(foundStudent!, grade))
+                {
+                    MarkupPrinter.PrintSuccess("\nStudent's grade modified successfully!");
+                } else
+                {
+                    MarkupPrinter.PrintError($"\nStudent's grade is already {grade}.");
+                }
             }
         }
 
@@ -84,7 +88,7 @@ namespace Student_Book_Managment.Services.MenuActions
             }
             else
             {
-                MarkupPrinter.PrintError($"Students in roll number: {rollNum} couldn't be found.\n");
+                MarkupPrinter.PrintError($"\nStudents in roll number: {rollNum} couldn't be found.");
             }
         }
         public static void FindStudentByIdAction()

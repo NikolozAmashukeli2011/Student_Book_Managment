@@ -48,10 +48,15 @@ namespace Student_Book_Managment.Services.StudentsService
             IdToStudentMap.Add(s.Id, s);
         }
 
-        public static void ModifyGrade(Student student, char grade)
+        public static bool ModifyGrade(Student student, char grade)
         {
             if (Student.IsValidGrade(grade))
             {
+                if (student.Grade == grade)
+                {
+                    return false;
+                }
+
                 char pastGrade = student.Grade; // storing the students past grade before updating it.
                 student.Grade = grade; // modifying students grade with passed in grade.
 
@@ -68,6 +73,7 @@ namespace Student_Book_Managment.Services.StudentsService
                 }
 
                 SaveAllAsync(); // saving to json files after modifying collection.
+                return true;
             }
             else
             {

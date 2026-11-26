@@ -115,7 +115,7 @@ namespace Student_Book_Managment.Services.MenuActions
             {
                 BookManager.RemoveBook(foundBook!);
 
-                MarkupPrinter.PrintSuccess("Book removed successfully!\n");
+                MarkupPrinter.PrintSuccess("\nBook removed successfully!");
                 TablePrinter.PrintObj(foundBook!, MethodStyles.RemoveStyles);
             }
             else
