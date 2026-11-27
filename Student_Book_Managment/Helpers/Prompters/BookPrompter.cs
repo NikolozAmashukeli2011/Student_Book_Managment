@@ -14,7 +14,7 @@ namespace Student_Book_Managment.Helpers.Prompters
 
             while (title.All(char.IsDigit))
             {
-                title = Prompter.PromptString(txt, retryTxt, errTxt);
+                title = Prompter.PromptString(retryTxt, errTxt, retryTxt);
             }
 
             return title.Trim();

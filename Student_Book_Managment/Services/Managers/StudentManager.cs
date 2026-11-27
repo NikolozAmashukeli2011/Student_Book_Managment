@@ -48,11 +48,14 @@ namespace Student_Book_Managment.Services.StudentsService
             IdToStudentMap.Add(s.Id, s);
         }
 
+        public static bool IsEmpty() => studentsList.Count == 0;
+
         public static bool ModifyGrade(Student student, char grade)
         {
+
             if (Student.IsValidGrade(grade))
             {
-                if (student.Grade == grade)
+                if (student.Grade == grade) // if student's current grade is the same as the grade we are trying to replace with, we return false.
                 {
                     return false;
                 }
@@ -60,7 +63,14 @@ namespace Student_Book_Managment.Services.StudentsService
                 char pastGrade = student.Grade; // storing the students past grade before updating it.
                 student.Grade = grade; // modifying students grade with passed in grade.
 
-                BestGradeToStudentsMap[pastGrade].Remove(student); // removing the student from list of students keyed by past grade.
+                if (BestGradeToStudentsMap[pastGrade].Count == 1)
+                {
+                    BestGradeToStudentsMap.Remove(pastGrade); // if list of student's with the past grade is only one, that means that only student param is in that list, so we remove the kvp entirely.
+                }
+                else
+                {
+                    BestGradeToStudentsMap[pastGrade].Remove(student); // else, we remove the student from list of students keyed by past grade.
+                }
 
                 if (BestGradeToStudentsMap.ContainsKey(grade)) // if key exists, add student to that list (value).
                 {

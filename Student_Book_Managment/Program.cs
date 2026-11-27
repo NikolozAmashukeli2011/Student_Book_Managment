@@ -1,6 +1,8 @@
 ﻿using Spectre.Console;
 using Student_Book_Managment.Enums;
 using Student_Book_Managment.Helpers.Prompters;
+using Student_Book_Managment.Helpers.UI.Printers;
+using Student_Book_Managment.Helpers.UI.Styles;
 using Student_Book_Managment.Services;
 using Student_Book_Managment.Services.Managers;
 using Student_Book_Managment.Services.MenuActions;
@@ -10,34 +12,29 @@ using Student_Managment.Models;
 await StudentManager.InitializeAsync(); // InitilizeAsync method reads the data from the json files asynchronously, and refills the collections of manager classes.
 await BookManager.InitializeAsync();
 
-int methodChoice; // integer variable storing the method user picked to run.
-int exitChoice; // integer variable that stores the last method's (which is always exit) number.
-string intErrTxt = "Input must be an integer, try again: "; // variable storing text that is later passed into Prompter class method(s).
-string rolesTxt = "Input your Role (Student or Admin): "; // same thing here, variable storing that that gets passed into Prompter class method(s).
-string rolesRetryTxt = "Input must be a role (Student or Admin), try again: ";// same here....
-string stringErrTxt = "Input must be a text, try again: "; // same here...
+MenuAction[] avaliableActions; // storing names of actions that user can run based on the role.
+MenuAction actionChoice; // variable storing the method user picked to run.
+string intErrTxt = "Input must be an integer, try again: "; // variables storing text that is later passed into Prompter class method(s).
+string rolesTxt = "Input your Role (Student or Admin): ";
+string rolesRetryTxt = "Input must be a role (Student or Admin), try again: ";
+string stringErrTxt = "Input must be a text, try again: ";
 
-Dictionary<int, Action> actions; // Dictionary storing methods number as the key, and method (Action) reference itself as a value.
-                                 // using this so program doesn't asks about the roles to then match the runnable methods on each iteration.
-
-Roles userRole; // Storing the role result that was returned by Prompter.PromptEnum<T>() method.
-
-string textBasedOnRole = string.Empty; // Variable storing text that is supposed to be displayed on each iteration based on user role (what methods he can access).
-
+ROLES userRole; // Storing the role result that was returned by Prompter.PromptEnum<T>() method.
+ 
 Console.WriteLine("\nPick your Role\n");
 
 Console.WriteLine("Admin.\n" +
                  "Student.\n");
 
-userRole = Prompter.PromptEnum<Roles>(rolesTxt, rolesRetryTxt, stringErrTxt);
+userRole = Prompter.PromptEnum<ROLES>(rolesTxt, rolesRetryTxt, stringErrTxt);
 
-if (userRole == Roles.Student)
+if (userRole == ROLES.Student)
 {
     int userId = StudentPrompter.PromptId();
 
     if (StudentManager.FindStudentById(userId, out Student? chosenStudent))
     {
-        Session.CurrentStudent = chosenStudent;
+        Session.CurrentStudent = chosenStudent; // storing this sessions student.
         Console.WriteLine($"Successfully logged in as: {chosenStudent!.Name}.\n");
     }
     else
@@ -58,101 +55,24 @@ if (userRole == Roles.Student)
         }
         else if (nextActionNum == 2)
         {
-            userRole = Prompter.PromptEnum<Roles>(rolesTxt, rolesRetryTxt, stringErrTxt);
+            userRole = Prompter.PromptEnum<ROLES>(rolesTxt, rolesRetryTxt, stringErrTxt);
         }
         else
         {
             Environment.Exit(0);
         }
     }
-
-    textBasedOnRole =
-    "\n[bold green][[LIBRARY]][/]\n" +
-    "1. Borrow a book.\n" +
-    "2. Return a book.\n" +
-    "\n[bold cyan][[DISPLAY]][/]\n" +
-    "3. Display borrowed books.\n" +
-    "4. Display all books.\n" +
-    "5. Display books by year.\n" +
-    "\n[bold magenta][[FIND]][/]\n" +
-    "6. Find book by id.\n" +
-    "7. Find book by title.\n" +
-    "\n[bold grey][[EXIT]][/]\n" +
-    "8. Exit.\n";
-
-    actions = new()
-    {
-        [1] = BookMenuActions.BorrowBook,
-        [2] = BookMenuActions.ReturnBook,
-        [3] = BookMenuActions.DisplayBorrowedBooks,
-        [4] = BookManager.DisplayAllBooks,
-        [5] = BookManager.DisplayBooksByYear,
-        [6] = BookMenuActions.FindBookById,
-        [7] = BookMenuActions.FindBookByTitle
-    };
-}
-else
-{
-    textBasedOnRole =
-        "\n[bold green][[ADD]][/]\n" +
-        "1. Add a student.\n" +
-        "2. Add a book.\n" +
-        "\n[bold yellow][[UPDATE]][/]\n" +
-        "3. Update student’s grade.\n" +
-        "\n[bold cyan][[DISPLAY]][/]\n" +
-        "4. Display all students.\n" +
-        "5. Display students by grade.\n" +
-        "6. Display all books.\n" +
-        "7. Display books by year.\n" +
-        "\n[bold magenta][[FIND]][/]\n" +
-        "8. Find book by id.\n" +
-        "9. Find book by title.\n" +
-        "10. Find student by id.\n" +
-        "11. Find students by roll number.\n" +
-        "\n[bold red][[REMOVE]][/]\n" +
-        "12. Remove student by id.\n" +
-        "13. Remove book by id.\n" +
-        "14. Remove all students.\n" +
-        "15. Remove all books.\n" +
-        "\n[bold grey][[EXIT]][/]\n" +
-        "16. Exit.\n";
-
-    actions = new() // Matching the method number to the methods reference.
-    {
-        [1] = StudentMenuActions.AddStudentAction,
-        [2] = BookMenuActions.AddBook,
-        [3] = StudentMenuActions.ModifyGrade,
-        [4] = StudentManager.DisplayAllStudents,
-        [5] = StudentManager.DisplayStudentsByGrade,
-        [6] = BookManager.DisplayAllBooks,
-        [7] = BookManager.DisplayBooksByYear,
-        [8] = BookMenuActions.FindBookById,
-        [9] = BookMenuActions.FindBookByTitle,
-        [10] = StudentMenuActions.FindStudentByIdAction,
-        [11] = StudentMenuActions.FindStudentsByRollNum,
-        [12] = StudentMenuActions.RemoveStudentByIdAction,
-        [13] = BookMenuActions.RemoveBookById,
-        [14] = StudentMenuActions.RemoveAllStudents,
-        [15] = BookMenuActions.RemoveAllBooks
-    };
 }
 
-exitChoice = actions.Count + 1;
+avaliableActions = userRole == ROLES.Student ? MenuCatalog.StudentActions : MenuCatalog.AdminActions;
 
 do
 {
-    AnsiConsole.MarkupLine(textBasedOnRole);
+    actionChoice = PromptPrinter.SelectionPrinter(title: "Pick your action", choices: avaliableActions, converter: MenuCatalog.ToDisplayText, pageSize: avaliableActions.Length);
 
-    methodChoice = Prompter.PromptGeneric<int>($"Input a number (1-{exitChoice}): ", intErrTxt);
-
-    while (methodChoice < 1 || methodChoice > exitChoice)
-    {
-        methodChoice = Prompter.PromptGeneric<int>($"Input must be a number 1-{exitChoice}, try again: ", intErrTxt);
-    }
-
-    if (methodChoice != exitChoice) // checking if the user's desired method matches with exit methods number. if it doesn't match,
+    if (actionChoice != MenuAction.Exit) // checking if the user's desired method matches with exit methods number. if it doesn't match,
     {                              // we run the action that is stored inside the actions dictionary with key of method of users choice.
-        actions[methodChoice]();  // doing this so i dont get KeyNotFoundException.
+        MenuCatalog.Actions[actionChoice]();  // doing this so i dont get KeyNotFoundException.
     }
 
-} while (methodChoice != exitChoice);
+} while (actionChoice != MenuAction.Exit);

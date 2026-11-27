@@ -17,35 +17,43 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (success)
             {
-                MarkupPrinter.PrintSuccess("Student added successfully!\n");
+                MarkupPrinter.PrintSuccess("\nStudent added successfully!");
                 TablePrinter.PrintObj(studentToAdd, MethodStyles.AddStyles);
             }
             else
             {
-                MarkupPrinter.PrintError("adding the Student failed!\n");
+                MarkupPrinter.PrintError("\nadding the Student failed!");
             }
         }
 
         public static void ModifyGrade()
         {
+            if (StudentManager.IsEmpty())
+            {
+                MarkupPrinter.PrintError("\nThere are no students!");
+                return;
+            }
+
             int id = StudentPrompter.PromptId();
 
             StudentManager.FindStudentById(id, out Student? foundStudent);
 
             if (foundStudent == null)
             {
-                MarkupPrinter.PrintError($"Student with id: {id} couldn't be found!\n");
+                MarkupPrinter.PrintError($"\nStudent with id: {id} couldn't be found!");
             }
             else
             {
                 char grade = StudentPrompter.PromptGrade();
+                char pastGrade = foundStudent.Grade;
 
                 if (StudentManager.ModifyGrade(foundStudent!, grade))
                 {
-                    MarkupPrinter.PrintSuccess("\nStudent's grade modified successfully!");
-                } else
+                    MarkupPrinter.PrintSuccess($"\n{foundStudent.Name}'s grade modified successfully! ({pastGrade} -> {grade}).");
+                }
+                else
                 {
-                    MarkupPrinter.PrintError($"\nStudent's grade is already {grade}.");
+                    MarkupPrinter.PrintError($"\n{foundStudent.Name}'s grade is already {grade}.");
                 }
             }
         }
@@ -59,12 +67,12 @@ namespace Student_Book_Managment.Services.MenuActions
             if (foundSuccessfully)
             {
                 StudentManager.RemoveStudent(student!);
-                MarkupPrinter.PrintSuccess("Student removed successfully!\n");
+                MarkupPrinter.PrintSuccess("\nStudent removed successfully!");
                 TablePrinter.PrintObj(student!, MethodStyles.RemoveStyles);
             }
             else
             {
-                MarkupPrinter.PrintError($"\nStudent with id: {id} couldn't be found.\n");
+                MarkupPrinter.PrintError($"\nStudent with id: {id} couldn't be found.");
             }
         }
 
@@ -99,12 +107,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (foundSuccessfully)
             {
-                MarkupPrinter.PrintSuccess("Student found successfully!\n");
+                MarkupPrinter.PrintSuccess("\nStudent found successfully!");
                 TablePrinter.PrintObj(student!, MethodStyles.FindStyles);
             }
             else
             {
-                MarkupPrinter.PrintError($"Student with id: {id} couldn't be found.\n");
+                MarkupPrinter.PrintError($"\nStudent with id: {id} couldn't be found.");
             }
         }
 

@@ -1,12 +1,12 @@
 {
-  "IdCount": 4,
+  "IdCount": 6,
   "Books": [
     {
-      "Id": 1,
+      "Id": 6,
       "Title": "c#",
-      "Author": "mate",
+      "Author": "dudunadze",
       "BorrowedByStudentId": null,
-      "YearOfPublish": 2025
+      "YearOfPublish": 2026
     }
   ]
 }

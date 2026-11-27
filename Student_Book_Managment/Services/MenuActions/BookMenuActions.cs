@@ -22,12 +22,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (success)
             {
-                MarkupPrinter.PrintSuccess("Book added successfully!\n");
+                MarkupPrinter.PrintSuccess("\nBook added successfully!");
                 TablePrinter.PrintObj(book, MethodStyles.AddStyles);
             }
             else
             {
-                MarkupPrinter.PrintError("Adding the book failed!\n");
+                MarkupPrinter.PrintError("\nAdding the book failed!");
             }
         }
 
@@ -83,12 +83,12 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (BookManager.GetBookByTitle(title, out Book? foundBook))
             {
-                MarkupPrinter.PrintSuccess("\nBook found!\n");
+                MarkupPrinter.PrintSuccess("\nBook found!");
                 TablePrinter.PrintObj(foundBook!, MethodStyles.FindStyles);
             }
             else
             {
-                MarkupPrinter.PrintError($"Book with title: {title} couldn't be found.\n");
+                MarkupPrinter.PrintError($"\nBook with title: {title} couldn't be found.");
             }
         }
 
@@ -98,7 +98,7 @@ namespace Student_Book_Managment.Services.MenuActions
 
             if (BookManager.GetBookById(id, out Book? foundBook))
             {
-                MarkupPrinter.PrintSuccess("\nBook found!\n");
+                MarkupPrinter.PrintSuccess("\nBook found!");
                 TablePrinter.PrintObj(foundBook!, MethodStyles.FindStyles);
             }
             else

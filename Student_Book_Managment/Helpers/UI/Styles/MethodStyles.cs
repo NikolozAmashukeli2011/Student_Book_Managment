@@ -9,7 +9,7 @@ namespace Student_Book_Managment.Helpers.Printers.TableStyles
         {
             ColumnColor = Color.LightGreen,
             RoundedCorners = true,
-            BorderColor = Color.DarkGreen
+            BorderColor = Color.Green
         };
 
         public static readonly TablePrinterOptions UpdateStyles = new()
@@ -39,13 +39,6 @@ namespace Student_Book_Managment.Helpers.Printers.TableStyles
             ColumnColor = Color.LightCoral,
             RoundedCorners = true,
             BorderColor = Color.DarkRed
-        };
-
-        public static readonly TablePrinterOptions ExitStyles = new()
-        {
-            ColumnColor = Color.Silver,
-            RoundedCorners = true,
-            BorderColor = Color.Grey23
         };
     }
 }

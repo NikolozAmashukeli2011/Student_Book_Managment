@@ -7,7 +7,7 @@ namespace Student_Managment.Models
     internal class Student
     {
         public static readonly HashSet<char> grades = new HashSet<char>() { 'A', 'B', 'C', 'D', 'F' }; // set of chars which is used to prevent invalid grades via .contains().
-        public HashSet<Book> BorrowedBooks = []; // storing the set of books that this student has borrowed.
+        public HashSet<Book> BorrowedBooks = []; // storing the set of books that this student has borrowed from the library.
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int RollNum { get; set; }
@@ -46,6 +46,8 @@ namespace Student_Managment.Models
             }
 
         }
+
+
         public static bool IsValidGrade(char grade) => grades.Contains(grade); // preventing invalid grade arguments.
 
 
